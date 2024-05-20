@@ -1,0 +1,26 @@
+.outer-container {
+  display: flex;
+  justify-content: center;
+}
+
+.page-width {
+  max-width: 1024px;
+  min-width: 100px;
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+}
+
+.inner-container {
+  margin-bottom: 200px;
+}
+
+.version {
+  margin-top: 50px;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  font-size: .8em;
+}

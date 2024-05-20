@@ -1,0 +1,29 @@
+<div class="page">
+  <h1>Host Page</h1>
+
+  <mat-form-field>
+    <mat-label>Room Name</mat-label>
+    <input matInput [(ngModel)]="roomName" [disabled]="!!client">
+  </mat-form-field>
+
+  <br>
+  <ng-container *ngIf="roomName">
+    <button mat-raised-button color="primary" *ngIf="!client" (click)="connect()">
+      create room
+    </button>
+
+    <button mat-raised-button color="primary" *ngIf="!!client" (click)="resetBuzzers()">
+      reset buzzers
+    </button>
+  </ng-container>
+
+  <br>
+  <br>
+  <div *ngIf="!!client">
+    <h2>Responses</h2>
+
+    <ol type="1">
+      <li *ngFor="let singlePlayer of responses">{{singlePlayer}}</li>
+    </ol>
+  </div>
+</div>

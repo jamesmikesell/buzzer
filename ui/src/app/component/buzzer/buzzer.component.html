@@ -1,0 +1,32 @@
+<div class="page">
+  <div class="input-list">
+    <mat-form-field>
+      <mat-label>Room Name</mat-label>
+      <input matInput [(ngModel)]="roomName" [disabled]="!!client">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Player Name</mat-label>
+      <input matInput [(ngModel)]="playerName" [disabled]="!!client">
+    </mat-form-field>
+  </div>
+
+  <ng-container *ngIf="roomName && playerName">
+    <button mat-raised-button color="primary" *ngIf="!client" (click)="connect()">
+      connect
+    </button>
+
+    <button mat-raised-button color="primary" class="buzz-button" *ngIf="!!client" (click)="attemptBuzz()"
+      [disabled]="buzzDisabled">
+      <ng-container *ngIf="!buzzDisabled">
+        Buzz!
+        <br><br>
+        (space bar)
+      </ng-container>
+      <ng-container *ngIf="buzzDisabled">
+        waiting for presenter to reset
+      </ng-container>
+
+    </button>
+  </ng-container>
+</div>
