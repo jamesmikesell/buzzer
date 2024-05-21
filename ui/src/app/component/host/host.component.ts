@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import mqtt from "mqtt";
 import { BuzzDto } from '../../model/dtos';
+import { Encryption } from '../../service/encryption';
+import { Topic } from '../../service/topic';
 
 @Component({
   selector: 'app-host',
@@ -26,6 +28,9 @@ export class HostComponent {
   responses: string[] = [];
 
   private readonly ROOM_NAME = "roomName";
+  private readonly encryption = new Encryption();
+  private topicReset: string;
+  private topicBuzz: string;
 
 
   constructor() {
@@ -33,22 +38,26 @@ export class HostComponent {
   }
 
 
-  connect(): void {
+  async connect(): Promise<void> {
+    this.topicBuzz = await Topic.buzz(this.roomName);
+    this.topicReset = await Topic.reset(this.roomName);
+
     this.client = mqtt.connect("wss://broker.hivemq.com:8884/mqtt");
-    this.client.on("connect", () => {
-      this.client.subscribe(`buzzer-app/${this.roomName}/buzz`, (err: any) => { });
+    this.client.on("connect", async () => {
+      this.client.subscribe(this.topicBuzz, (err: any) => { });
     });
 
-    this.client.on("message", (topic, message) => {
-      let dto: BuzzDto = JSON.parse(message.toString());
+    this.client.on("message", async (topic, message) => {
+      let dto: BuzzDto = JSON.parse(await this.encryption.decryptData(message.toString(), this.roomName));
       this.responses.push(dto.playerName)
     });
   }
 
 
-  resetBuzzers(): void {
+  async resetBuzzers(): Promise<void> {
     this.responses.length = 0;
-    this.client.publish(`buzzer-app/${this.roomName}/reset`, "{}");
+    let encryptedDto = await this.encryption.encryptData("{}", this.roomName);
+    this.client.publish(this.topicReset, encryptedDto);
   }
 
 
