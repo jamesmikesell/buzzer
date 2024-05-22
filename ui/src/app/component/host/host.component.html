@@ -1,10 +1,16 @@
 <div class="page">
-  <h1>Host Page</h1>
+  <h1>Presenter Mode</h1>
 
-  <mat-form-field>
-    <mat-label>Room Name</mat-label>
-    <input matInput [(ngModel)]="roomName" [disabled]="!!client">
-  </mat-form-field>
+  <div class="input-list">
+    <mat-form-field>
+      <mat-label>Room Name</mat-label>
+      <input matInput [(ngModel)]="roomName" [disabled]="!!client" required #uxRoomName="ngModel">
+      <mat-error *ngIf="uxRoomName.hasError('required')">Required</mat-error>
+    </mat-form-field>
+
+    <mat-checkbox [(ngModel)]="audio">Audio</mat-checkbox>
+  </div>
+
 
   <br>
   <ng-container *ngIf="roomName">
@@ -12,9 +18,18 @@
       create room
     </button>
 
-    <button mat-raised-button color="primary" *ngIf="!!client" (click)="resetBuzzers()">
-      reset buzzers
-    </button>
+    <ng-container *ngIf="!!client">
+      <h2>Buzzers</h2>
+      <div class="input-list">
+        <button mat-raised-button color="warn" (click)="resetBuzzers(false)">
+          disable
+        </button>
+
+        <button mat-raised-button color="accent" (click)="resetBuzzers(true)">
+          {{responses.length ? "reset & enable" : "enable"}}
+        </button>
+      </div>
+    </ng-container>
   </ng-container>
 
   <br>

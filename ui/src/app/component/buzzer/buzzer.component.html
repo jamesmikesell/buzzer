@@ -2,12 +2,14 @@
   <div class="input-list">
     <mat-form-field>
       <mat-label>Room Name</mat-label>
-      <input matInput [(ngModel)]="roomName" [disabled]="!!client">
+      <input matInput [(ngModel)]="roomName" [disabled]="!!client" required #uxRoomName="ngModel">
+      <mat-error *ngIf="uxRoomName.hasError('required')">Required</mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Player Name</mat-label>
-      <input matInput [(ngModel)]="playerName" [disabled]="!!client">
+      <input matInput [(ngModel)]="playerName" [disabled]="!!client" required #uxPlayerName="ngModel">
+      <mat-error *ngIf="uxPlayerName.hasError('required')">Required</mat-error>
     </mat-form-field>
   </div>
 

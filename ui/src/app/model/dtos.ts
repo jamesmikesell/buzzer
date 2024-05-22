@@ -1,6 +1,8 @@
 
-export class BuzzDto {
-  constructor(
-    public playerName: string,
-  ) { }
+export interface BuzzDto {
+  playerName: string,
+}
+
+export interface ResetDto {
+  enableBuzzers: boolean;
 }

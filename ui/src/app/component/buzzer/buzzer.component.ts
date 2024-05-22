@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import mqtt from "mqtt";
-import { BuzzDto } from '../../model/dtos';
+import { BuzzDto, ResetDto } from '../../model/dtos';
 import { Encryption } from '../../service/encryption';
 import { Topic } from '../../service/topic';
 
@@ -51,7 +51,11 @@ export class BuzzerComponent {
       return;
 
     this.buzzDisabled = true;
-    let encryptedDto = await this.encryption.encryptData(JSON.stringify(new BuzzDto(this.playerName)), this.roomName);
+
+    let buzzDto: BuzzDto = {
+      playerName: this.playerName,
+    }
+    let encryptedDto = await this.encryption.encryptData(JSON.stringify(buzzDto), this.roomName);
     this.client.publish(this.topicBuzz, encryptedDto);
   }
 
@@ -66,9 +70,9 @@ export class BuzzerComponent {
     });
 
     this.client.on("message", async (topic, message) => {
-      let resetDto = JSON.parse(await this.encryption.decryptData(message.toString(), this.roomName));
+      let resetDto: ResetDto = JSON.parse(await this.encryption.decryptData(message.toString(), this.roomName));
       if (resetDto)
-        this.buzzDisabled = false;
+        this.buzzDisabled = !resetDto.enableBuzzers;
     });
   }
 
