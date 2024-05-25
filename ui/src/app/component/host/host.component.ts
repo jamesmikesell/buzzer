@@ -26,13 +26,16 @@ export class HostComponent {
   }
   client: mqtt.MqttClient;
   audio = false;
+  // responses: string[] = ["Jim", "Jordan", "Long name that is really long"];
   responses: string[] = [];
+  sortedScores: [string, number][] = []
+  scores = new Map<string, number>();
+
 
   private readonly ROOM_NAME = "roomName";
   private readonly encryption = new Encryption();
   private topicReset: string;
   private topicBuzz: string;
-
 
   constructor() {
     this._roomName = localStorage.getItem(this.ROOM_NAME);
@@ -86,6 +89,20 @@ export class HostComponent {
     let encryptedPayload = await this.encryption.encryptData(JSON.stringify(dto), this.roomName);
     this.client.publish(this.topicReset, encryptedPayload);
   }
+
+  adjustPoints(playerName: string, scoreAdjustment: number): void {
+    let existingScore = this.scores.get(playerName) | 0;
+    existingScore += scoreAdjustment;
+    this.scores.set(playerName, existingScore);
+
+    this.sortedScores.length = 0
+    this.scores.forEach((score, player) => {
+      this.sortedScores.push([player, score])
+    })
+
+    this.sortedScores.sort((a, b) => b[1] - a[1])
+  }
+
 
 
 }

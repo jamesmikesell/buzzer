@@ -18,8 +18,8 @@
       connect
     </button>
 
-    <button mat-raised-button color="primary" class="buzz-button" *ngIf="!!client" (click)="attemptBuzz()"
-      [disabled]="buzzDisabled">
+    <button mat-raised-button color="primary" class="buzz-button" *ngIf="!!client" (touchstart)="attemptBuzz()"
+      (click)="attemptBuzz()" [disabled]="buzzDisabled">
       <ng-container *ngIf="!buzzDisabled">
         Buzz!
         <br><br>
