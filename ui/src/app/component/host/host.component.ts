@@ -58,29 +58,41 @@ export class HostComponent {
       this.client.subscribe(this.topicBuzz, (err: any) => { });
     });
 
-    this.client.on("message", async (topic, message) => {
-      let dto: BuzzDto = JSON.parse(await this.encryption.decryptData(message.toString(), this.roomName));
-      if (this.audio)
-        BeepUtil.playChirp();
-
-      let contestant = this.contestants.get(dto.playerName);
-      if (!contestant) {
-        contestant = new Contestant();
-        contestant.name = dto.playerName;
-        this.contestants.set(dto.playerName, contestant);
-      }
-
-      const now = Date.now();
-      if (!this.firstAnswerTime)
-        this.firstAnswerTime = now;
-
-      const delta = now - this.firstAnswerTime;
-      contestant.speedDelta.push(delta);
-
-      this.responses.push(new Response(contestant, delta))
-      if (this.handicapQuickPlayers)
-        this.responses.sort((a, b) => a.handicapAdjustedResponseTime() - b.handicapAdjustedResponseTime())
+    this.client.on("message", (topic, message) => {
+      if (topic === this.topicBuzz)
+        this.handleBuzzerResponse(message.toString());
     });
+  }
+
+
+  private async handleBuzzerResponse(message: string): Promise<void> {
+    let dto: BuzzDto = JSON.parse(await this.encryption.decryptData(message, this.roomName));
+    if (this.audio)
+      BeepUtil.playChirp();
+
+    let contestant = this.contestants.get(dto.playerName);
+    if (!contestant) {
+      contestant = new Contestant();
+      contestant.name = dto.playerName;
+      this.contestants.set(dto.playerName, contestant);
+    }
+
+    const now = Date.now();
+    if (!this.firstAnswerTime)
+      this.firstAnswerTime = now;
+
+    let playerAlreadyResponded = this.responses.filter(single => single.contestant === contestant);
+    if (playerAlreadyResponded.length) {
+      console.log("Player already responded this round")
+      return;
+    }
+
+    const delta = now - this.firstAnswerTime;
+    contestant.speedDelta.push(delta);
+
+    this.responses.push(new Response(contestant, delta))
+    if (this.handicapQuickPlayers)
+      this.responses.sort((a, b) => a.handicapAdjustedResponseTime() - b.handicapAdjustedResponseTime())
   }
 
 
