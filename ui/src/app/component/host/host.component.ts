@@ -26,16 +26,17 @@ export class HostComponent {
   }
   client: mqtt.MqttClient;
   audio = false;
-  // responses: string[] = ["Jim", "Jordan", "Long name that is really long"];
-  responses: string[] = [];
-  sortedScores: [string, number][] = []
-  scores = new Map<string, number>();
-
+  responses: Response[] = [];
+  sortedScores: Contestant[] = []
+  contestants = new Map<string, Contestant>();
+  handicapQuickPlayers = false;
+  hapticFeedback = false;
 
   private readonly ROOM_NAME = "roomName";
   private readonly encryption = new Encryption();
   private topicReset: string;
   private topicBuzz: string;
+  private firstAnswerTime: number;
 
   constructor() {
     this._roomName = localStorage.getItem(this.ROOM_NAME);
@@ -55,7 +56,24 @@ export class HostComponent {
       let dto: BuzzDto = JSON.parse(await this.encryption.decryptData(message.toString(), this.roomName));
       if (this.audio)
         this.playChirp();
-      this.responses.push(dto.playerName)
+
+      let contestant = this.contestants.get(dto.playerName);
+      if (!contestant) {
+        contestant = new Contestant();
+        contestant.name = dto.playerName;
+        this.contestants.set(dto.playerName, contestant);
+      }
+
+      const now = Date.now();
+      if (!this.firstAnswerTime)
+        this.firstAnswerTime = now;
+
+      const delta = now - this.firstAnswerTime;
+      contestant.speedDelta.push(delta);
+
+      this.responses.push(new Response(contestant, delta))
+      if (this.handicapQuickPlayers)
+        this.responses.sort((a, b) => a.handicapAdjustedResponseTime() - b.handicapAdjustedResponseTime())
     });
   }
 
@@ -82,6 +100,8 @@ export class HostComponent {
     if (enabled)
       this.responses.length = 0;
 
+    this.firstAnswerTime = undefined;
+
     let dto: ResetDto = {
       enableBuzzers: enabled,
     }
@@ -90,19 +110,50 @@ export class HostComponent {
     this.client.publish(this.topicReset, encryptedPayload);
   }
 
+
   adjustPoints(playerName: string, scoreAdjustment: number): void {
-    let existingScore = this.scores.get(playerName) | 0;
-    existingScore += scoreAdjustment;
-    this.scores.set(playerName, existingScore);
+    let contestant = this.contestants.get(playerName);
+    contestant.score += scoreAdjustment;
 
     this.sortedScores.length = 0
-    this.scores.forEach((score, player) => {
-      this.sortedScores.push([player, score])
+    this.contestants.forEach(singlePlayer => {
+      this.sortedScores.push(singlePlayer)
     })
 
-    this.sortedScores.sort((a, b) => b[1] - a[1])
+    this.sortedScores.sort((a, b) => b.score - a.score)
+
+    if (this.hapticFeedback)
+      navigator.vibrate(150);
   }
 
 
 
+}
+
+
+class Contestant {
+  name: string;
+  speedDelta: number[] = [];
+  score = 0;
+
+  /** the average time delay between the first person responding and this contestant */
+  averageResponseTimeDelta(): number {
+    if (this.speedDelta.length < 3)
+      return 0;
+
+    return this.speedDelta.reduce((a, b) => a + b) / this.speedDelta.length;
+  }
+}
+
+
+class Response {
+  constructor(
+    public contestant: Contestant,
+    public responseTimeDelta: number,
+  ) { }
+
+
+  handicapAdjustedResponseTime() {
+    return this.responseTimeDelta - this.contestant.averageResponseTimeDelta();
+  }
 }

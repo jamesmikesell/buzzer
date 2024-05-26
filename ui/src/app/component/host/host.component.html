@@ -9,6 +9,10 @@
     </mat-form-field>
 
     <mat-checkbox [(ngModel)]="audio">Audio</mat-checkbox>
+
+    <mat-checkbox [(ngModel)]="handicapQuickPlayers">Handicap Quick Players</mat-checkbox>
+
+    <mat-checkbox [(ngModel)]="hapticFeedback">Haptic Feedback</mat-checkbox>
   </div>
 
 
@@ -40,16 +44,21 @@
     <div *ngIf="!responses.length">... Waiting for players</div>
 
     <div class="players">
-      <div *ngFor="let singlePlayer of responses; let i = index" class="player-container">
+      <div *ngFor="let singleResponse of responses" class="player-container">
         <button mat-raised-button color="warn" class="player-button"
-          (click)="adjustPoints(singlePlayer, -1)">-</button>
+          (click)="adjustPoints(singleResponse.contestant.name, -1)">-</button>
 
         <div class="player-name">
-          {{i+1}} - ({{scores.get(singlePlayer)}}) - {{singlePlayer}}
+          ({{singleResponse.contestant.score}})
+          <span *ngIf="handicapQuickPlayers">
+            [+{{singleResponse.responseTimeDelta / 1000 |
+            number:'1.1-1'}} : -{{singleResponse.contestant.averageResponseTimeDelta() / 1000 | number:'1.1-1'}}] -
+          </span>
+          {{singleResponse.contestant.name}}
         </div>
 
         <button mat-raised-button color="accent" class="player-button"
-          (click)="adjustPoints(singlePlayer, 1)">+</button>
+          (click)="adjustPoints(singleResponse.contestant.name, 1)">+</button>
       </div>
     </div>
   </div>
@@ -57,9 +66,16 @@
 
   <div *ngIf="!!client" class="scores">
     <h2>Scores</h2>
-
+    <!-- 1 points -3.2s handicap - Elena -->
     <ol type="1">
-      <li *ngFor="let singleScore of sortedScores">{{singleScore[0]}} - Points: {{singleScore[1]}}</li>
+      <li *ngFor="let singleContestant of sortedScores">
+        {{singleContestant.score}} points
+        <span *ngIf="handicapQuickPlayers">
+          -{{singleContestant.averageResponseTimeDelta() / 1000 | number:'1.1-1'}}s handicap
+        </span>
+
+        - {{singleContestant.name}}
+      </li>
     </ol>
   </div>
 
