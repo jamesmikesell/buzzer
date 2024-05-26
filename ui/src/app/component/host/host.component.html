@@ -25,12 +25,8 @@
     <ng-container *ngIf="!!client">
       <h2>Buzzers</h2>
       <div class="input-list">
-        <button mat-raised-button color="warn" (click)="resetBuzzers(false)">
-          disable
-        </button>
-
-        <button mat-raised-button color="accent" (click)="resetBuzzers(true)">
-          {{responses.length ? "reset & enable" : "enable"}}
+        <button mat-raised-button [color]="enabled ? 'warn' : 'accent'" (click)="enabled = !enabled">
+          {{enabled ? "disable" : "enable"}}
         </button>
       </div>
     </ng-container>
@@ -41,7 +37,8 @@
   <div *ngIf="!!client">
     <h2>Responses</h2>
 
-    <div *ngIf="!responses.length">... Waiting for players</div>
+    <div *ngIf="!enabled && !responses.length">Buzzers are disabled. Click "enable" to enable buzzers.</div>
+    <div *ngIf="enabled && !responses.length">... Waiting for players</div>
 
     <div class="players">
       <div *ngFor="let singleResponse of responses" class="player-container">

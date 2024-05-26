@@ -31,6 +31,10 @@ export class HostComponent {
   contestants = new Map<string, Contestant>();
   handicapQuickPlayers = false;
   hapticFeedback = false;
+  private _enabled = false;
+  get enabled(): boolean { return this._enabled }
+  set enabled(val: boolean) { this._enabled = val; this.resetBuzzers() }
+
 
   private readonly ROOM_NAME = "roomName";
   private readonly encryption = new Encryption();
@@ -96,14 +100,14 @@ export class HostComponent {
   }
 
 
-  async resetBuzzers(enabled: boolean): Promise<void> {
-    if (enabled)
+  async resetBuzzers(): Promise<void> {
+    if (this.enabled)
       this.responses.length = 0;
 
     this.firstAnswerTime = undefined;
 
     let dto: ResetDto = {
-      enableBuzzers: enabled,
+      enableBuzzers: this.enabled,
     }
 
     let encryptedPayload = await this.encryption.encryptData(JSON.stringify(dto), this.roomName);
