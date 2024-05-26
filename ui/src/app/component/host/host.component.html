@@ -8,12 +8,23 @@
       <mat-error *ngIf="uxRoomName.hasError('required')">Required</mat-error>
     </mat-form-field>
 
-    <mat-checkbox [(ngModel)]="audio">Audio</mat-checkbox>
-
-    <mat-checkbox [(ngModel)]="handicapQuickPlayers">Handicap Quick Players</mat-checkbox>
-
-    <mat-checkbox [(ngModel)]="hapticFeedback">Haptic Feedback</mat-checkbox>
   </div>
+
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Settings
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="input-list">
+      <mat-checkbox [(ngModel)]="audio">Audio</mat-checkbox>
+
+      <mat-checkbox [(ngModel)]="handicapQuickPlayers">Handicap Quick Players</mat-checkbox>
+
+      <mat-checkbox [(ngModel)]="hapticFeedback">Haptic Feedback</mat-checkbox>
+    </div>
+  </mat-expansion-panel>
 
 
   <br>
