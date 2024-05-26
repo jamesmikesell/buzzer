@@ -7,13 +7,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
 import mqtt from "mqtt";
 import { BuzzDto, ResetDto } from '../../model/dtos';
+import { BeepUtil } from '../../service/beep.util';
 import { Encryption } from '../../service/encryption';
 import { Topic } from '../../service/topic';
 
 @Component({
   selector: 'app-host',
   standalone: true,
-  imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatCheckboxModule],
+  imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatCheckboxModule, MatExpansionModule],
   templateUrl: './host.component.html',
   styleUrl: './host.component.scss'
 })
@@ -60,7 +61,7 @@ export class HostComponent {
     this.client.on("message", async (topic, message) => {
       let dto: BuzzDto = JSON.parse(await this.encryption.decryptData(message.toString(), this.roomName));
       if (this.audio)
-        this.playChirp();
+        BeepUtil.playChirp();
 
       let contestant = this.contestants.get(dto.playerName);
       if (!contestant) {
@@ -80,24 +81,6 @@ export class HostComponent {
       if (this.handicapQuickPlayers)
         this.responses.sort((a, b) => a.handicapAdjustedResponseTime() - b.handicapAdjustedResponseTime())
     });
-  }
-
-  private playChirp(): void {
-    const audioContext = new window.AudioContext;
-    const oscillator = audioContext.createOscillator();
-    const gainNode = audioContext.createGain();
-
-    oscillator.type = 'sine';
-
-    let startFrequency = 3000;
-    let playTime = 0.1;
-    oscillator.frequency.setValueAtTime(startFrequency, audioContext.currentTime);
-
-    oscillator.connect(gainNode);
-    gainNode.connect(audioContext.destination);
-
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + playTime);
   }
 
 
