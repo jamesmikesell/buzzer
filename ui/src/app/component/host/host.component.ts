@@ -21,7 +21,7 @@ import { Topic } from '../../service/topic';
 export class HostComponent {
 
   private _roomName: string;
-  get roomName(): string { return this._roomName?.toLocaleLowerCase(); }
+  get roomName(): string { return this._roomName }
   set roomName(val: string) {
     localStorage.setItem(this.ROOM_NAME, "" + val);
     this._roomName = val;
@@ -127,6 +127,9 @@ export class HostComponent {
   }
 
 
+  cleanRoomName(): void {
+    this.roomName = Topic.trimAndRemoveDoubleSpaces(this.roomName)
+  }
 
 }
 

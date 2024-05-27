@@ -4,7 +4,8 @@
   <div class="input-list">
     <mat-form-field>
       <mat-label>Room Name</mat-label>
-      <input matInput [(ngModel)]="roomName" [disabled]="!!client" required #uxRoomName="ngModel">
+      <input matInput [(ngModel)]="roomName" [disabled]="!!client" required #uxRoomName="ngModel"
+        (focusout)="cleanRoomName()">
       <mat-error *ngIf="uxRoomName.hasError('required')">Required</mat-error>
     </mat-form-field>
 
