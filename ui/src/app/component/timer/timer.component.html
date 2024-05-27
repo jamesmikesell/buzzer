@@ -1,0 +1,3 @@
+<button mat-raised-button [color]="!secondLeft ? 'primary' : 'warn'" class="timer-button" (click)="timerButtonClick()">
+  {{!secondLeft ? "start timer" : "stop - " + (secondLeft | async | number:'1.1-1') }}
+</button>

@@ -19,11 +19,19 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div class="input-list">
-      <mat-checkbox [(ngModel)]="audio">Audio</mat-checkbox>
+      <mat-checkbox [(ngModel)]="audio">Audio on Buzz-in</mat-checkbox>
 
       <mat-checkbox [(ngModel)]="handicapQuickPlayers">Handicap Quick Players</mat-checkbox>
 
-      <mat-checkbox [(ngModel)]="hapticFeedback">Haptic Feedback</mat-checkbox>
+      <mat-checkbox [(ngModel)]="hapticFeedback">Haptic Feedback on Scoring</mat-checkbox>
+
+      <mat-checkbox [(ngModel)]="showTimer">Show Timer</mat-checkbox>
+
+      <mat-form-field *ngIf="showTimer">
+        <mat-label>Timer Seconds</mat-label>
+        <input matInput type="number" min="1" step="1" [(ngModel)]="timerSeconds" required #uxTimerSeconds="ngModel">
+        <mat-error *ngIf="uxTimerSeconds.hasError('required')">Required</mat-error>
+      </mat-form-field>
     </div>
   </mat-expansion-panel>
 
@@ -34,17 +42,18 @@
       create room
     </button>
 
+
     <ng-container *ngIf="!!client">
-      <h2>Buzzers</h2>
       <div class="input-list">
         <button mat-raised-button [color]="enabled ? 'warn' : 'accent'" (click)="enabled = !enabled">
-          {{enabled ? "disable" : "enable"}}
+          {{enabled ? "disable buzzers" : "enable buzzers"}}
         </button>
+
+        <app-timer *ngIf="showTimer" [timerSeconds]="timerSeconds"></app-timer>
       </div>
     </ng-container>
   </ng-container>
 
-  <br>
   <br>
   <div *ngIf="!!client">
     <h2>Responses</h2>

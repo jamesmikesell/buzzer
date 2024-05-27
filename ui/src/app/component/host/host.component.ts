@@ -10,13 +10,14 @@ import { BuzzDto, ResetDto } from '../../model/dtos';
 import { BeepUtil } from '../../service/beep.util';
 import { Encryption } from '../../service/encryption';
 import { Topic } from '../../service/topic';
+import { TimerComponent } from "../timer/timer.component";
 
 @Component({
   selector: 'app-host',
   standalone: true,
-  imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatCheckboxModule, MatExpansionModule],
   templateUrl: './host.component.html',
-  styleUrl: './host.component.scss'
+  styleUrl: './host.component.scss',
+  imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatCheckboxModule, MatExpansionModule, TimerComponent]
 })
 export class HostComponent {
 
@@ -27,12 +28,14 @@ export class HostComponent {
     this._roomName = val;
   }
   client: mqtt.MqttClient;
-  audio = false;
+  audio = true;
   responses: Response[] = [];
   sortedScores: Contestant[] = []
   contestants = new Map<string, Contestant>();
-  handicapQuickPlayers = false;
-  hapticFeedback = false;
+  handicapQuickPlayers = true;
+  hapticFeedback = true;
+  showTimer = true;
+  timerSeconds = 10;
   private _enabled = false;
   get enabled(): boolean { return this._enabled }
   set enabled(val: boolean) { this._enabled = val; this.resetBuzzers() }
