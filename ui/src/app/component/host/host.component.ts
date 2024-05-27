@@ -7,7 +7,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatInputModule } from '@angular/material/input';
 import mqtt from "mqtt";
 import { BuzzDto, ResetDto } from '../../model/dtos';
-import { BeepUtil } from '../../service/beep.util';
+import { AudioService } from '../../service/audio-service';
 import { Encryption } from '../../service/encryption';
 import { Topic } from '../../service/topic';
 import { TimerComponent } from "../timer/timer.component";
@@ -46,6 +46,8 @@ export class HostComponent {
   private topicReset: string;
   private topicBuzz: string;
   private firstAnswerTime: number;
+  private audioService = new AudioService();
+
 
   constructor() {
     this._roomName = localStorage.getItem(this.ROOM_NAME);
@@ -70,8 +72,6 @@ export class HostComponent {
 
   private async handleBuzzerResponse(message: string): Promise<void> {
     let dto: BuzzDto = JSON.parse(await this.encryption.decryptData(message, this.roomName));
-    if (this.audio)
-      BeepUtil.playChirp();
 
     let contestant = this.contestants.get(dto.playerName);
     if (!contestant) {
@@ -89,6 +89,9 @@ export class HostComponent {
       console.log("Player already responded this round")
       return;
     }
+
+    if (this.audio)
+      this.audioService.playBuzzer();
 
     const delta = now - this.firstAnswerTime;
     contestant.speedDelta.push(delta);

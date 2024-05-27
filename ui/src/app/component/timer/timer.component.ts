@@ -1,8 +1,8 @@
 import { AsyncPipe, DecimalPipe } from '@angular/common';
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Subject, Subscription, interval, map, takeUntil, takeWhile, tap } from 'rxjs';
-import { BeepUtil } from '../../service/beep.util';
+import { AudioService } from '../../service/audio-service';
 
 @Component({
   selector: 'app-timer',
@@ -17,7 +17,8 @@ export class TimerComponent implements OnDestroy {
   secondLeft: Subject<number>;
 
   private destroy = new Subject<void>();
-  timerSubscription: Subscription;
+  private timerSubscription: Subscription;
+  private audioService = new AudioService();
 
 
   timerButtonClick(): void {
@@ -70,13 +71,7 @@ export class TimerComponent implements OnDestroy {
 
 
   private async alarm(): Promise<void> {
-    let toneHz = 2000;
-    const delay = 500;
-    BeepUtil.playChirp(toneHz);
-    await new Promise(resolve => setTimeout(resolve, delay));
-    BeepUtil.playChirp(toneHz *= .9);
-    await new Promise(resolve => setTimeout(resolve, delay));
-    BeepUtil.playChirp(toneHz *= .72);
+    this.audioService.playAlarm();
   }
 
 }
