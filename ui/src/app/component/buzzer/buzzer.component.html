@@ -5,12 +5,14 @@
       <input matInput [(ngModel)]="roomName" [disabled]="!!client" required #uxRoomName="ngModel"
         (focusout)="cleanRoomName()">
       <mat-error *ngIf="uxRoomName.hasError('required')">Required</mat-error>
+      <mat-icon matPrefix>house</mat-icon>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Player Name</mat-label>
       <input matInput [(ngModel)]="playerName" [disabled]="!!client" required #uxPlayerName="ngModel">
       <mat-error *ngIf="uxPlayerName.hasError('required')">Required</mat-error>
+      <mat-icon matPrefix>sentiment_very_satisfied</mat-icon>
     </mat-form-field>
   </div>
 

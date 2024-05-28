@@ -11,13 +11,14 @@ import { AudioService } from '../../service/audio-service';
 import { Encryption } from '../../service/encryption';
 import { Topic } from '../../service/topic';
 import { TimerComponent } from "../timer/timer.component";
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-host',
   standalone: true,
   templateUrl: './host.component.html',
   styleUrl: './host.component.scss',
-  imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatCheckboxModule, MatExpansionModule, TimerComponent]
+  imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatCheckboxModule, MatExpansionModule, TimerComponent, MatIconModule]
 })
 export class HostComponent {
 

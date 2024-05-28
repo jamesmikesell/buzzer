@@ -18,7 +18,7 @@ export class Topic {
     if (input)
       return input.toLocaleLowerCase().replace(/\s{2,}/g, ' ').trim();
 
-    return input;
+    return "";
   }
 
 }
