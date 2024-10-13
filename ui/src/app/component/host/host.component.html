@@ -33,6 +33,18 @@
         <input matInput type="number" min="1" step="1" [(ngModel)]="timerSeconds" required #uxTimerSeconds="ngModel">
         <mat-error *ngIf="uxTimerSeconds.hasError('required')">Required</mat-error>
       </mat-form-field>
+
+      <mat-form-field >
+        <mat-label>Wrong Answer Points</mat-label>
+        <input matInput type="number" min="1" step="1" [(ngModel)]="pointsNegative" required #uxTimerSeconds="ngModel">
+        <mat-error *ngIf="uxTimerSeconds.hasError('required')">Required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field >
+        <mat-label>Correct Answer Points</mat-label>
+        <input matInput type="number" min="1" step="1" [(ngModel)]="pointsPositive" required #uxTimerSeconds="ngModel">
+        <mat-error *ngIf="uxTimerSeconds.hasError('required')">Required</mat-error>
+      </mat-form-field>
     </div>
   </mat-expansion-panel>
 

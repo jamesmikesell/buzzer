@@ -37,6 +37,8 @@ export class HostComponent {
   hapticFeedback = true;
   showTimer = true;
   timerSeconds = 10;
+  pointsNegative = 1;
+  pointsPositive = 1;
   private _enabled = false;
   get enabled(): boolean { return this._enabled }
   set enabled(val: boolean) { this._enabled = val; this.resetBuzzers() }
@@ -120,7 +122,8 @@ export class HostComponent {
 
   adjustPoints(playerName: string, scoreAdjustment: number): void {
     let contestant = this.contestants.get(playerName);
-    contestant.score += scoreAdjustment;
+    let multiplier = scoreAdjustment > 0 ? this.pointsPositive : this.pointsNegative
+    contestant.score += scoreAdjustment * multiplier;
 
     this.sortedScores.length = 0
     this.contestants.forEach(singlePlayer => {
