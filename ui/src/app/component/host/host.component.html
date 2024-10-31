@@ -77,7 +77,7 @@
 
   <br>
   <div *ngIf="!!client">
-    <h2>Responses</h2>
+    <h2>Responses <span *ngIf="responses.length">({{responses.length}})</span></h2>
 
     <div *ngIf="!enabled && !responses.length">Buzzers are disabled. Click "enable" to enable buzzers.</div>
     <div *ngIf="enabled && !responses.length">... Waiting for players</div>
