@@ -33,20 +33,23 @@
         <input matInput type="number" min="1" step="1" [(ngModel)]="gameConfig.timerSeconds" required
           #uxTimerSeconds="ngModel">
         <mat-error *ngIf="uxTimerSeconds.hasError('required')">Required</mat-error>
+        <mat-error *ngIf="uxTimerSeconds.hasError('min')">Must be >0</mat-error>
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Wrong Answer Points</mat-label>
-        <input matInput type="number" min="1" step="1" [(ngModel)]="gameConfig.pointsNegative" required
-          #uxTimerSeconds="ngModel">
-        <mat-error *ngIf="uxTimerSeconds.hasError('required')">Required</mat-error>
+        <mat-label>Wrong Answer Subtracts Points</mat-label>
+        <input matInput type="number" min="1" step="1" [(ngModel)]="gameConfig.pointsNegative" (blur)="absolute()"
+          required #uxWrong="ngModel">
+        <mat-error *ngIf="uxWrong.hasError('required')">Required</mat-error>
+        <mat-error *ngIf="uxWrong.hasError('min')">Must be >0</mat-error>
       </mat-form-field>
 
       <mat-form-field>
-        <mat-label>Correct Answer Points</mat-label>
-        <input matInput type="number" min="1" step="1" [(ngModel)]="gameConfig.pointsPositive" required
-          #uxTimerSeconds="ngModel">
-        <mat-error *ngIf="uxTimerSeconds.hasError('required')">Required</mat-error>
+        <mat-label>Correct Answer Adds Points</mat-label>
+        <input matInput type="number" min="1" step="1" [(ngModel)]="gameConfig.pointsPositive" (blur)="absolute()"
+          required #uxRight="ngModel">
+        <mat-error *ngIf="uxRight.hasError('required')">Required</mat-error>
+        <mat-error *ngIf="uxRight.hasError('min')">Must be >0</mat-error>
       </mat-form-field>
 
       <button mat-raised-button color="warn" (click)="clearScores()">

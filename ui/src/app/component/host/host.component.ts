@@ -168,6 +168,12 @@ export class HostComponent implements OnDestroy {
   }
 
 
+  absolute(): void {
+    this.gameConfig.pointsNegative = Math.abs(this.gameConfig.pointsNegative)
+    this.gameConfig.pointsPositive = Math.abs(this.gameConfig.pointsPositive)
+  }
+
+
   private persistScores(sortedScores: Contestant[]) {
     let scoreWrapper = new ScoresWrapper();
     scoreWrapper.sortedScores = sortedScores;
