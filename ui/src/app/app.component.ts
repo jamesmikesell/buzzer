@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AppVersion } from './app-version';
-import { BuzzerComponent } from "./component/buzzer/buzzer.component";
-import { HostComponent } from "./component/host/host.component";
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    imports: [RouterOutlet, BuzzerComponent, HostComponent]
+    imports: [RouterOutlet]
 })
 export class AppComponent {
   title = 'buzzer';
