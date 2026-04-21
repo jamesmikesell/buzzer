@@ -4,26 +4,43 @@
       <h1>Scoreboard</h1>
       <mat-form-field>
         <mat-label>Room Name</mat-label>
-        <input matInput type="password" [(ngModel)]="roomName" name="roomName" required
-          #uxRoomName="ngModel" autocomplete="off" (focusout)="cleanRoomName()">
-        @if (uxRoomName.hasError('required')) {
+        <input
+          matInput
+          type="password"
+          [(ngModel)]="roomName"
+          name="roomName"
+          required
+          #uxRoomName="ngModel"
+          autocomplete="off"
+          (focusout)="cleanRoomName()"
+        />
+        @if (uxRoomName.hasError("required")) {
           <mat-error>Required</mat-error>
         }
         <mat-icon matPrefix>lock</mat-icon>
       </mat-form-field>
-      <button mat-raised-button color="primary" type="submit" [disabled]="!roomName || connecting">
-        {{connecting ? 'connecting...' : 'connect'}}
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!roomName || connecting"
+      >
+        {{ connecting ? "connecting..." : "connect" }}
       </button>
       @if (connectionError) {
-        <div class="entry-error">{{connectionError}}</div>
+        <div class="entry-error">{{ connectionError }}</div>
       }
     </form>
   </div>
 }
 
 @if (connected) {
-  <div class="scoreboard-shell" [style.--player-count]="players.length || 1"
-    [class.cursor-hidden]="cursorHidden" (pointermove)="showFullscreenButton()">
+  <div
+    class="scoreboard-shell"
+    [style.--player-count]="players.length || 1"
+    [class.cursor-hidden]="cursorHidden"
+    (pointermove)="showFullscreenButton()"
+  >
     <header class="scoreboard-header">
       <div>Rank</div>
       <div>Player</div>
@@ -32,24 +49,33 @@
     @if (players.length) {
       <main class="scoreboard-list">
         @for (player of players; track player) {
-          <section class="scoreboard-row" [class.tie]="player.tie"
-            [class.tie-start]="player.tieStart" [class.tie-end]="player.tieEnd">
-            <div class="rank">{{player.rank}}</div>
-            <div class="player-name">{{player.name}}</div>
-            <div class="score">{{player.score}}</div>
+          <section
+            class="scoreboard-row"
+            [class.tie]="player.tie"
+            [class.tie-start]="player.tieStart"
+            [class.tie-end]="player.tieEnd"
+          >
+            <div class="rank">{{ player.rank }}</div>
+            <div class="player-name">{{ player.name }}</div>
+            <div class="score">{{ player.score }}</div>
           </section>
         }
       </main>
     }
     @if (!players.length) {
-      <main class="empty-scoreboard">
-        Waiting for scores
-      </main>
+      <main class="empty-scoreboard">Waiting for scores</main>
     }
-    <button type="button" class="fullscreen-button" [class.visible]="fullscreenButtonVisible"
-      (click)="toggleFullscreen($event)" [attr.aria-label]="isFullscreen ? 'Exit fullscreen' : 'Show fullscreen'">
-      <mat-icon>{{isFullscreen ? 'fullscreen_exit' : 'aspect_ratio'}}</mat-icon>
-      <span>{{isFullscreen ? 'exit fullscreen' : 'show fullscreen'}}</span>
+    <button
+      type="button"
+      class="fullscreen-button"
+      [class.visible]="fullscreenButtonVisible"
+      (click)="toggleFullscreen($event)"
+      [attr.aria-label]="isFullscreen ? 'Exit fullscreen' : 'Show fullscreen'"
+    >
+      <mat-icon>{{
+        isFullscreen ? "fullscreen_exit" : "aspect_ratio"
+      }}</mat-icon>
+      <span>{{ isFullscreen ? "exit fullscreen" : "show fullscreen" }}</span>
     </button>
   </div>
 }
