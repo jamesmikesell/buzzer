@@ -1,0 +1,115 @@
+:host {
+  display: block;
+}
+
+.scoreboard-entry {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.entry-form {
+  width: min(420px, 100%);
+  display: grid;
+  gap: 18px;
+}
+
+.entry-form h1 {
+  margin: 0 0 8px;
+  font-size: clamp(2.25rem, 8vw, 4.5rem);
+  line-height: 1;
+}
+
+.entry-error {
+  color: #b00020;
+  font-weight: 700;
+}
+
+.scoreboard-shell {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: clamp(8px, 1.5vh, 18px);
+  padding: clamp(10px, 2.2vw, 34px);
+  background: linear-gradient(135deg, #080b12, #141e2a 42%, #0c0f17);
+  color: #f7fbff;
+  overflow: hidden;
+}
+
+.scoreboard-header,
+.scoreboard-row {
+  display: grid;
+  grid-template-columns: minmax(3.4ch, .6fr) minmax(0, 4fr) minmax(4ch, 1fr);
+  align-items: center;
+  gap: clamp(8px, 2vw, 28px);
+}
+
+.scoreboard-header {
+  color: #ffd166;
+  font-size: clamp(1rem, 2.5vw, 2.3rem);
+  font-weight: 900;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  border-bottom: clamp(2px, .4vh, 5px) solid rgba(255, 209, 102, .85);
+  padding-bottom: clamp(6px, 1vh, 14px);
+}
+
+.scoreboard-header :last-child,
+.score {
+  text-align: right;
+}
+
+.scoreboard-list {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: repeat(var(--player-count), minmax(0, 1fr));
+  gap: clamp(6px, 1.4vh, 18px);
+}
+
+.scoreboard-row {
+  min-height: 0;
+  padding: clamp(8px, 1.8vh, 22px) clamp(10px, 2vw, 28px);
+  border: 1px solid rgba(247, 251, 255, .18);
+  border-left: clamp(5px, .8vw, 12px) solid #06d6a0;
+  background: rgba(247, 251, 255, .08);
+}
+
+.rank,
+.player-name, .score {
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.15;
+}
+
+.rank {
+  color: #ffd166;
+  font-size: clamp(2rem, calc(55vh / var(--player-count)), 8.5rem);
+  font-weight: 950;
+}
+
+.player-name {
+  font-size: clamp(1.8rem, calc(42vh / var(--player-count)), 7.5rem);
+  font-weight: 950;
+}
+
+.score {
+  color: #4cc9f0;
+  font-size: clamp(2rem, calc(55vh / var(--player-count)), 8.5rem);
+  font-weight: 950;
+}
+
+.empty-scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(247, 251, 255, .78);
+  font-size: clamp(2rem, 8vw, 7rem);
+  font-weight: 900;
+  text-align: center;
+}

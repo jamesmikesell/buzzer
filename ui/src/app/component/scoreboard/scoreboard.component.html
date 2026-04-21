@@ -1,0 +1,39 @@
+<div class="scoreboard-entry" *ngIf="!connected">
+  <form class="entry-form" (ngSubmit)="connect()">
+    <h1>Scoreboard</h1>
+
+    <mat-form-field>
+      <mat-label>Room Name</mat-label>
+      <input matInput type="password" [(ngModel)]="roomName" name="roomName" required
+        #uxRoomName="ngModel" autocomplete="off" (focusout)="cleanRoomName()">
+      <mat-error *ngIf="uxRoomName.hasError('required')">Required</mat-error>
+      <mat-icon matPrefix>lock</mat-icon>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="!roomName">
+      connect
+    </button>
+
+    <div class="entry-error" *ngIf="connectionError">{{connectionError}}</div>
+  </form>
+</div>
+
+<div class="scoreboard-shell" *ngIf="connected" [style.--player-count]="players.length || 1">
+  <header class="scoreboard-header">
+    <div>Rank</div>
+    <div>Player</div>
+    <div>Score</div>
+  </header>
+
+  <main class="scoreboard-list" *ngIf="players.length">
+    <section class="scoreboard-row" *ngFor="let player of players">
+      <div class="rank">{{player.rank}}</div>
+      <div class="player-name">{{player.name}}</div>
+      <div class="score">{{player.score}}</div>
+    </section>
+  </main>
+
+  <main class="empty-scoreboard" *ngIf="!players.length">
+    Waiting for scores
+  </main>
+</div>

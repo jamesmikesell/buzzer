@@ -14,6 +14,12 @@ export class Topic {
   }
 
 
+  static scoreboard(roomName: string): Promise<string> {
+    let topic = `buzzer-app/${roomName}/scoreboard`;
+    return Encryption.hashString(topic);
+  }
+
+
   static trimAndRemoveDoubleSpaces(input: string): string {
     if (input)
       return input.toLocaleLowerCase().replace(/\s{2,}/g, ' ').trim();

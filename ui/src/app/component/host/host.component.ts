@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { instanceToPlain, plainToInstance, Type } from 'class-transformer';
 import mqtt from "mqtt";
 import { interval, Subject, takeUntil } from 'rxjs';
-import { BuzzDto, ResetDto } from '../../model/dtos';
+import { BuzzDto, ResetDto, ScoreboardDto, ScoreboardPlayerDto } from '../../model/dtos';
 import { AudioService } from '../../service/audio-service';
 import { Encryption } from '../../service/encryption';
 import { Topic } from '../../service/topic';
@@ -46,6 +46,7 @@ export class HostComponent implements OnDestroy {
   private readonly encryption = new Encryption();
   private topicReset: string;
   private topicBuzz: string;
+  private topicScoreboard: string;
   private firstAnswerTime: number;
   private audioService = new AudioService();
   private destroy = new Subject<void>();
@@ -74,10 +75,12 @@ export class HostComponent implements OnDestroy {
   async connect(): Promise<void> {
     this.topicBuzz = await Topic.buzz(this.roomName);
     this.topicReset = await Topic.reset(this.roomName);
+    this.topicScoreboard = await Topic.scoreboard(this.roomName);
 
     this.client = mqtt.connect("wss://broker.hivemq.com:8884/mqtt");
     this.client.on("connect", async () => {
       this.client.subscribe(this.topicBuzz, (err: any) => { });
+      await this.publishScoreboard();
     });
 
     this.client.on("message", (topic, message) => {
@@ -153,6 +156,7 @@ export class HostComponent implements OnDestroy {
     let contestant = this.contestants.get(playerName);
     let multiplier = scoreAdjustment > 0 ? this.gameConfig.pointsPositive : this.gameConfig.pointsNegative
     contestant.score += scoreAdjustment * multiplier;
+    contestant.hasScoreBeenAdjusted = true;
 
     this.sortedScores.length = 0
     this.contestants.forEach(singlePlayer => {
@@ -162,6 +166,7 @@ export class HostComponent implements OnDestroy {
     this.sortedScores.sort((a, b) => b.score - a.score)
 
     this.persistScores(this.sortedScores);
+    void this.publishScoreboard();
 
     if (this.gameConfig.hapticFeedback)
       navigator.vibrate(150);
@@ -202,6 +207,39 @@ export class HostComponent implements OnDestroy {
     localStorage.setItem(this.KEY_PERSISTED_SCORES, "{}");
     this.contestants.clear();
     this.sortedScores.length = 0;
+    void this.publishScoreboard();
+  }
+
+
+  private async publishScoreboard(): Promise<void> {
+    if (!this.client || !this.topicScoreboard)
+      return;
+
+    let players = this.scoreboardPlayers();
+    let dto: ScoreboardDto = { players };
+    let encryptedPayload = await this.encryption.encryptData(JSON.stringify(dto), this.roomName);
+
+    this.client.publish(this.topicScoreboard, encryptedPayload, { retain: true });
+  }
+
+
+  private scoreboardPlayers(): ScoreboardPlayerDto[] {
+    let players = this.sortedScores.filter(singleContestant => singleContestant.hasScoreBeenAdjusted);
+    let lastScore: number;
+    let lastRank = 0;
+
+    return players.map((singleContestant, index) => {
+      if (singleContestant.score !== lastScore) {
+        lastRank = index + 1;
+        lastScore = singleContestant.score;
+      }
+
+      return {
+        rank: lastRank,
+        name: singleContestant.name,
+        score: singleContestant.score,
+      };
+    });
   }
 
 }
@@ -211,6 +249,7 @@ class Contestant {
   name: string;
   speedDelta: number[] = [];
   score = 0;
+  hasScoreBeenAdjusted = false;
 
   /** the average time delay between the first person responding and this contestant */
   averageResponseTimeDelta(): number {
