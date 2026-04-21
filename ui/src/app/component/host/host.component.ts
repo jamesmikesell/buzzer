@@ -275,7 +275,7 @@ class Response {
 
 class GameConfig {
   audio = true;
-  handicapQuickPlayers = true;
+  handicapQuickPlayers = false;
   hapticFeedback = true;
   showTimer = true;
   timerSeconds = 10;
