@@ -10,11 +10,10 @@ import { Encryption } from '../../service/encryption';
 import { Topic } from '../../service/topic';
 
 @Component({
-  selector: 'app-scoreboard',
-  standalone: true,
-  imports: [CommonModule, FormsModule, MatButtonModule, MatIconModule, MatInputModule],
-  templateUrl: './scoreboard.component.html',
-  styleUrl: './scoreboard.component.scss'
+    selector: 'app-scoreboard',
+    imports: [CommonModule, FormsModule, MatButtonModule, MatIconModule, MatInputModule],
+    templateUrl: './scoreboard.component.html',
+    styleUrl: './scoreboard.component.scss'
 })
 export class ScoreboardComponent implements OnDestroy {
   roomName = "";

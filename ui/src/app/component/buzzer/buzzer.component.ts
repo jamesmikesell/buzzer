@@ -11,11 +11,10 @@ import { Topic } from '../../service/topic';
 
 
 @Component({
-  selector: 'app-buzzer',
-  standalone: true,
-  imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatIconModule],
-  templateUrl: './buzzer.component.html',
-  styleUrl: './buzzer.component.scss'
+    selector: 'app-buzzer',
+    imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatIconModule],
+    templateUrl: './buzzer.component.html',
+    styleUrl: './buzzer.component.scss'
 })
 export class BuzzerComponent {
 

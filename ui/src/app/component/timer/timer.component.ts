@@ -5,11 +5,10 @@ import { Subject, Subscription, interval, map, takeUntil, takeWhile, tap } from 
 import { AudioService } from '../../service/audio-service';
 
 @Component({
-  selector: 'app-timer',
-  standalone: true,
-  imports: [MatButtonModule, AsyncPipe, DecimalPipe],
-  templateUrl: './timer.component.html',
-  styleUrl: './timer.component.scss'
+    selector: 'app-timer',
+    imports: [MatButtonModule, AsyncPipe, DecimalPipe],
+    templateUrl: './timer.component.html',
+    styleUrl: './timer.component.scss'
 })
 export class TimerComponent implements OnDestroy {
 
