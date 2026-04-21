@@ -30,6 +30,8 @@
 
       <mat-checkbox [(ngModel)]="gameConfig.showTimer">Show Timer</mat-checkbox>
 
+      <mat-checkbox [(ngModel)]="gameConfig.highlightEnableBuzzers">Highlight Enable Buzzers Button</mat-checkbox>
+
       @if (gameConfig.showTimer) {
         <mat-form-field>
           <mat-label>Timer Seconds</mat-label>
@@ -85,7 +87,8 @@
       }
       @if (!!client) {
         <div class="input-list">
-          <button mat-raised-button [color]="enabled ? 'warn' : 'accent'" (click)="enabled = !enabled">
+          <button mat-raised-button [color]="enabled ? 'warn' : 'accent'" (click)="enabled = !enabled"
+            [class.enable-buzzers-attention]="!enabled && gameConfig.highlightEnableBuzzers">
             {{enabled ? "disable buzzers" : "enable buzzers"}}
           </button>
           @if (gameConfig.showTimer) {

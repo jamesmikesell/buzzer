@@ -16,10 +16,10 @@ import { Topic } from '../../service/topic';
 import { TimerComponent } from "../timer/timer.component";
 
 @Component({
-    selector: 'app-host',
-    templateUrl: './host.component.html',
-    styleUrl: './host.component.scss',
-    imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatCheckboxModule, MatExpansionModule, TimerComponent, MatIconModule]
+  selector: 'app-host',
+  templateUrl: './host.component.html',
+  styleUrl: './host.component.scss',
+  imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatCheckboxModule, MatExpansionModule, TimerComponent, MatIconModule]
 })
 export class HostComponent implements OnDestroy {
 
@@ -278,6 +278,7 @@ class GameConfig {
   handicapQuickPlayers = false;
   hapticFeedback = true;
   showTimer = true;
+  highlightEnableBuzzers = false;
   timerSeconds = 10;
   pointsNegative = 1;
   pointsPositive = 1;
