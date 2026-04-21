@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, HostListener, NgZone, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,7 +11,7 @@ import { Topic } from '../../service/topic';
 
 @Component({
     selector: 'app-scoreboard',
-    imports: [CommonModule, FormsModule, MatButtonModule, MatIconModule, MatInputModule],
+    imports: [FormsModule, MatButtonModule, MatIconModule, MatInputModule],
     templateUrl: './scoreboard.component.html',
     styleUrl: './scoreboard.component.scss'
 })

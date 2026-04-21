@@ -4,34 +4,40 @@
       <mat-label>Room Name</mat-label>
       <input matInput [(ngModel)]="roomName" [disabled]="!!client" required #uxRoomName="ngModel"
         (focusout)="cleanRoomName()">
-      <mat-error *ngIf="uxRoomName.hasError('required')">Required</mat-error>
+      @if (uxRoomName.hasError('required')) {
+        <mat-error>Required</mat-error>
+      }
       <mat-icon matPrefix>house</mat-icon>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Player Name</mat-label>
       <input matInput [(ngModel)]="playerName" [disabled]="!!client" required #uxPlayerName="ngModel">
-      <mat-error *ngIf="uxPlayerName.hasError('required')">Required</mat-error>
+      @if (uxPlayerName.hasError('required')) {
+        <mat-error>Required</mat-error>
+      }
       <mat-icon matPrefix>sentiment_very_satisfied</mat-icon>
     </mat-form-field>
   </div>
 
-  <ng-container *ngIf="roomName && playerName">
-    <button mat-raised-button color="primary" *ngIf="!client" (click)="connect()">
-      connect
-    </button>
-
-    <button mat-raised-button color="primary" class="buzz-button" *ngIf="!!client" (touchstart)="attemptBuzz()"
-      (click)="attemptBuzz()" [disabled]="buzzDisabled">
-      <ng-container *ngIf="!buzzDisabled">
-        Buzz!
-        <br><br>
-        (space bar)
-      </ng-container>
-      <ng-container *ngIf="buzzDisabled">
-        waiting for presenter to reset
-      </ng-container>
-
-    </button>
-  </ng-container>
+  @if (roomName && playerName) {
+    @if (!client) {
+      <button mat-raised-button color="primary" (click)="connect()">
+        connect
+      </button>
+    }
+    @if (!!client) {
+      <button mat-raised-button color="primary" class="buzz-button" (touchstart)="attemptBuzz()"
+        (click)="attemptBuzz()" [disabled]="buzzDisabled">
+        @if (!buzzDisabled) {
+          Buzz!
+          <br><br>
+          (space bar)
+        }
+        @if (buzzDisabled) {
+          waiting for presenter to reset
+        }
+      </button>
+    }
+  }
 </div>

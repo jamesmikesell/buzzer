@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,7 +12,7 @@ import { Topic } from '../../service/topic';
 
 @Component({
     selector: 'app-buzzer',
-    imports: [MatInputModule, CommonModule, FormsModule, MatButtonModule, MatIconModule],
+    imports: [MatInputModule, FormsModule, MatButtonModule, MatIconModule],
     templateUrl: './buzzer.component.html',
     styleUrl: './buzzer.component.scss'
 })
