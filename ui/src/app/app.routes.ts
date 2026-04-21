@@ -1,10 +1,7 @@
 import { Routes } from '@angular/router';
-import { BuzzerComponent } from './component/buzzer/buzzer.component';
-import { HostComponent } from './component/host/host.component';
-import { ScoreboardComponent } from './component/scoreboard/scoreboard.component';
 
 export const routes: Routes = [
-  { path: 'host', component: HostComponent },
-  { path: 'scoreboard', component: ScoreboardComponent },
-  { path: '**', component: BuzzerComponent },
+  { path: 'host', loadComponent: () => import('./component/host/host.component').then(m => m.HostComponent), },
+  { path: 'scoreboard', loadComponent: () => import('./component/scoreboard/scoreboard.component').then(m => m.ScoreboardComponent), },
+  { path: '**', loadComponent: () => import('./component/buzzer/buzzer.component').then(m => m.BuzzerComponent), },
 ];
